@@ -1,0 +1,20 @@
+[project]
+name = "trainings-sync"
+version = "1.0"
+description = "The tool synchronizes Darkside movement trainings with CalDAV instance"
+authors = [
+    {name = "Samuel Dobroň", email = "samuel@dobron.sk"},
+]
+dependencies = [
+    "caldav>=1.3.6",
+    "requests>=2.31.0",
+    "pytz>=2023.3.post1",
+]
+requires-python = ">=3.9"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm.scripts]
+sync = {call = "src.main:main"}
+
