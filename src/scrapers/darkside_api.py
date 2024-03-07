@@ -28,7 +28,7 @@ class DarkSideAPIScraper(Scrapper):
 
         self._trainings = [
             training for training in response.json()["upcomingTrainings"]
-        ]
+        ] + [training for training in response.json()["pastTrainings"]]
 
         print(f"Got {len(self._trainings)}")
 

@@ -74,6 +74,9 @@ END:VCALENDAR
         return compensated.strftime(self._fmt)
 
     def create_event(self, training):
+        if training["startAt"] < datetime.now().isoformat():
+            return
+
         print("Creating event ", training)
 
         event_start_str = self._get_date_from_training(training["startAt"])
