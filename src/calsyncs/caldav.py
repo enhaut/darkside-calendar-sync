@@ -8,7 +8,7 @@ from icalendar import Event
 from datetime import datetime, timedelta
 
 from .calsync import CalSync
-
+from utils import get_event_id, EVENTID_CALSYNC_PREFIX
 
 class CalDav(CalSync):
     EVENT_TEMPLATE = """
@@ -37,7 +37,7 @@ END:VCALENDAR
     def __init__(
         self,
         *args,
-        events_filter: callable = lambda x: "Kalistenika" in x.data,
+        events_filter: callable = lambda x: EVENTID_CALSYNC_PREFIX in x.data,
         **kwargs,
     ):
         super().__init__(*args, events_filter=events_filter, **kwargs)
@@ -98,3 +98,4 @@ END:VCALENDAR
             event.delete()
         except:
             print(f"Could not remove {event.data}")
+            raise

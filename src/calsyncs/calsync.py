@@ -1,3 +1,5 @@
+from utils import get_event_id
+
 from functools import cache
 from abc import abstractmethod
 
@@ -45,32 +47,18 @@ class CalSync:
         """
         matched: list[tuple] = []
 
-        events = self.get_events()
+        events = {event.icalendar_component["UID"]: event for event in self.get_events()}
+        trainings = {get_event_id(training["trainingSlotId"], training["startAt"]): training for training in trainings}
 
         iterations = max(len(events), len(trainings))
 
-        for _ in range(iterations):
-            if trainings:
-                event = trainings.pop()
-            elif events:
-                event = events.pop()
+        uuids = [uuid for uuid in events.keys()]
+        for uuid in trainings.keys():
+            if uuid not in uuids:
+                uuids.append(uuid)
 
-            if isinstance(event, dict):  # training
-                event_id = (
-                    f"{event['trainingSlotId']}-{event['startAt'].replace(':', '')}"
-                )
-                cal_events = list(
-                    filter(lambda x: x.icalendar_component["UID"] == event_id, events)
-                )
-                if not cal_events:
-                    matched.append(
-                        (None, event)
-                    )  # training without calendar event created
-                else:
-                    matched.append((cal_events[0], event))  # cal. event + trianing
-                    events.remove(cal_events[0])
-            else:
-                matched.append((event, None))
+        for uuid in uuids:
+            matched.append((events.get(uuid, None), trainings.get(uuid, None)))
 
         return matched
 
