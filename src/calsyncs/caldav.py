@@ -17,7 +17,7 @@ VERSION:2.0
 PRODID:-//Sabre//Sabre VObject 4.4.2//EN
 CALSCALE:GREGORIAN
 BEGIN:VEVENT
-SUMMARY:Kalistenika
+SUMMARY:{title}
 DTSTART;TZID={tz}:{event_start}
 DTEND;TZID={tz}:{event_end}
 DTEND:{event_end}
@@ -86,7 +86,8 @@ END:VCALENDAR
 
         self._calendar.save_event(
             self.EVENT_TEMPLATE.format(
-                uid=f"{training['trainingSlotId']}-{training['startAt'].replace(':', '')}",
+                title=training["name"],
+                uid=get_event_id(training["trainingSlotId"], training["startAt"]),
                 event_start=event_start_str,
                 event_end=event_end_str,
                 tz=self.tz.zone,
