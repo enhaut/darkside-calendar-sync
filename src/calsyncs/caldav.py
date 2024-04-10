@@ -65,13 +65,12 @@ END:VCALENDAR
 
     def _get_date_from_training(self, raw_date: str):
         """
-        Transforms ISO datetime to string with DST compensated.
+        Transforms ISO datetime to string in format: "%Y%m%dT%H%M%SZ"
         """
 
         parsed = parser.parse(raw_date)
-        compensated = parsed + self.tz.localize(parsed).dst()
 
-        return compensated.strftime(self._fmt)
+        return parsed.strftime(self._fmt)
 
     def create_event(self, training):
         if training["startAt"] < datetime.now().isoformat():
